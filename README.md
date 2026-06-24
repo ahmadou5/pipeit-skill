@@ -35,7 +35,7 @@ to avoid all of these.
 ### Into a project (recommended)
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/pipeit-skill
+git clone https://github.com/ahmadou5/pipeit-skill
 cd pipeit-skill
 ./install.sh
 ```
@@ -44,7 +44,7 @@ cd pipeit-skill
 
 ```bash
 cd your-solana-ai-kit
-git submodule add https://github.com/YOUR_USERNAME/pipeit-skill .claude/skills/pipeit
+git submodule add https://github.com/ahmadou5/pipeit-skill .claude/skills/pipeit
 ```
 
 Then reference it in your `CLAUDE.md`:

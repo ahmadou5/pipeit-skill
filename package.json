@@ -1,0 +1,26 @@
+{
+  "name": "pipeit-skill",
+  "version": "1.0.0",
+  "description": "@pipeit/core transaction builder skill for Claude Code",
+  "main": "bin/install.js",
+  "bin": {
+    "install-pipeit-skill": "./bin/install.js"
+  },
+  "files": [
+    "bin/",
+    "skill/",
+    "agents/",
+    "commands/",
+    "rules/"
+  ],
+  "keywords": [
+    "claude-code",
+    "claude",
+    "mcp",
+    "agent-skills",
+    "solana",
+    "pipeit"
+  ],
+  "author": "ahmadou5",
+  "license": "MIT"
+}

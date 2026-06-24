@@ -2,72 +2,102 @@
 set -euo pipefail
 
 SKILL_NAME="pipeit"
-DEFAULT_INSTALL_DIR="$HOME/.claude/skills"
+DEFAULT_INSTALL_DIR="$HOME/.claude/skills/$SKILL_NAME"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+# Formatting Helpers
+info() { echo -e "  \033[34mℹ\033[0m $*"; }
+success() { echo -e "  \033[32m✓\033[0m $*"; }
+error() { echo -e "  \033[31m✗\033[0m $*" >&2; }
+
 echo ""
-echo "  pipeit-skill installer"
-echo "  ────────────────────────────────────"
+echo "  🚀 Installing pipeit-skill for Claude Code"
+echo "  ──────────────────────────────────────────"
 echo ""
 
-# Non-interactive mode
+# Parse flags
 NON_INTERACTIVE=false
 for arg in "$@"; do
-  [[ "$arg" == "-y" ]] && NON_INTERACTIVE=true
+  [[ "$arg" == "-y" || "$arg" == "--yes" ]] && NON_INTERACTIVE=true
 done
 
-# Install location
-INSTALL_DIR="$DEFAULT_INSTALL_DIR/$SKILL_NAME"
+# Smart Target Directory Selection
+INSTALL_DIR="$DEFAULT_INSTALL_DIR"
 
 if [[ "$NON_INTERACTIVE" == false ]]; then
-  read -r -p "Install to [$INSTALL_DIR]: " input
-  [[ -n "$input" ]] && INSTALL_DIR="$input"
+  # Show the default choice clearly so they can just press Enter
+  echo "Where would you like to install the skill?"
+  read -r -p "📂 Path [Default: $DEFAULT_INSTALL_DIR]: " input
+  
+  if [[ -n "$input" ]]; then
+    # Expand ~ if the user typed it manually
+    INSTALL_DIR="${input/#\~/$HOME}"
+  fi
 fi
 
-# Create target directory
+# Ensure absolute pathing
+if [[ "$INSTALL_DIR" != /* ]]; then
+  INSTALL_DIR="$(pwd)/$INSTALL_DIR"
+fi
+
+# Create target directory safely
 mkdir -p "$INSTALL_DIR"
 
-# Copy skill files
-cp -r "$SCRIPT_DIR/skill" "$INSTALL_DIR/"
-cp -r "$SCRIPT_DIR/agents" "$INSTALL_DIR/"
-cp -r "$SCRIPT_DIR/commands" "$INSTALL_DIR/"
-cp -r "$SCRIPT_DIR/rules" "$INSTALL_DIR/"
+# Verify source files exist before copying
+for dir in skill agents commands rules; do
+  if [[ -d "$SCRIPT_DIR/$dir" ]]; then
+    cp -r "$SCRIPT_DIR/$dir" "$INSTALL_DIR/"
+  else
+    info "Skipping missing source directory: $dir"
+  fi
+done
 
-echo "  ✓ Skill files installed to $INSTALL_DIR"
+success "Skill files installed to: $INSTALL_DIR"
 
-# Copy CLAUDE.md
+# CLAUDE.md Configuration Handling
 CLAUDE_DIR="$HOME/.claude"
 mkdir -p "$CLAUDE_DIR"
+TARGET_CLAUDE_MD="$CLAUDE_DIR/CLAUDE.md"
 
-if [[ -f "$CLAUDE_DIR/CLAUDE.md" ]]; then
+if [[ -f "$TARGET_CLAUDE_MD" ]]; then
   echo ""
-  echo "  Found existing $CLAUDE_DIR/CLAUDE.md"
+  info "Found existing configuration at $TARGET_CLAUDE_MD"
+  
   if [[ "$NON_INTERACTIVE" == false ]]; then
-    read -r -p "  Append pipeit-skill reference? [Y/n]: " confirm
+    read -r -p "  ❓ Append pipeit-skill integration rules? [Y/n]: " confirm
     confirm="${confirm:-Y}"
   else
     confirm="Y"
   fi
 
   if [[ "$confirm" =~ ^[Yy] ]]; then
-    cat >> "$CLAUDE_DIR/CLAUDE.md" << EOF
+    # Prevent duplicate appends if script is run twice
+    if grep -q "## Pipeit Skill" "$TARGET_CLAUDE_MD"; then
+       info "Pipeit Skill reference already exists in CLAUDE.md. Skipping append."
+    else
+      cat >> "$TARGET_CLAUDE_MD" << EOF
 
 ## Pipeit Skill
-
 Skill for \`@pipeit/core\` transaction building.
 Entry point: \`$INSTALL_DIR/skill/SKILL.md\`
 EOF
-    echo "  ✓ Appended to $CLAUDE_DIR/CLAUDE.md"
+      success "Appended configuration to $TARGET_CLAUDE_MD"
+    fi
   fi
 else
-  cp "$SCRIPT_DIR/CLAUDE.md" "$CLAUDE_DIR/CLAUDE.md"
-  echo "  ✓ Copied CLAUDE.md to $CLAUDE_DIR/"
+  if [[ -f "$SCRIPT_DIR/CLAUDE.md" ]]; then
+    cp "$SCRIPT_DIR/CLAUDE.md" "$TARGET_CLAUDE_MD"
+    success "Created brand new CLAUDE.md at $TARGET_CLAUDE_MD"
+  else
+    error "Source CLAUDE.md file missing from installation package."
+    exit 1
+  fi
 fi
 
 echo ""
-echo "  Done. The pipeit-skill is ready."
-echo ""
-echo "  Entry point: $INSTALL_DIR/skill/SKILL.md"
-echo "  Agent:       $INSTALL_DIR/agents/pipeit-engineer.md"
-echo "  Commands:    /build-tx, /debug-tx"
+echo "  🎉 Done! The pipeit-skill is ready for Claude Code."
+echo "  ───────────────────────────────────────────────────"
+echo "  Entry point:  $INSTALL_DIR/skill/SKILL.md"
+echo "  Agent:        $INSTALL_DIR/agents/pipeit-engineer.md"
+echo "  Commands:     /build-tx, /debug-tx"
 echo ""
