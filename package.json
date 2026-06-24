@@ -4,7 +4,7 @@
   "description": "@pipeit/core transaction builder skill for Claude Code",
   "main": "bin/install.js",
   "bin": {
-    "install-pipeit-skill": "./bin/install.js"
+    "install-pipeit-skill": "bin/install.js"
   },
   "files": [
     "bin/",
