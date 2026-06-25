@@ -6,6 +6,8 @@
 A skill addon for the [Solana AI Kit](https://github.com/solanabr/solana-ai-kit) that turns
 any coding agent into an expert `@pipeit/core` builder.
 
+---
+
 ## What this skill covers
 
 - `TransactionBuilder` — single transactions with auto-blockhash, retry, priority fees, CU estimation, ALTs
@@ -14,6 +16,8 @@ any coding agent into an expert `@pipeit/core` builder.
 - Execution strategies — Jito bundles, parallel RPC, direct TPU submission
 - `@pipeit/core/server` — Next.js TPU proxy API route
 - Error handling — typed errors, type guards, `diagnoseError()`
+
+---
 
 ## Problem it solves
 
@@ -30,24 +34,41 @@ Agents working without this skill regularly make mistakes:
 This skill gives agents the full accurate API surface, decision trees, and rules
 to avoid all of these.
 
+---
+
 ## Installation
 
-### Into a project (recommended)
+### Option 1 — npx (recommended)
+
+Run the interactive installer without adding a dependency to your project:
 
 ```bash
-git clone https://github.com/ahmadou5/pipeit-skill
-cd pipeit-skill
-./install.sh
+npx pipeit-skill
 ```
 
-### Into the Solana AI Kit
+The installer will:
+
+- Ask whether to install globally (`~/.claude/skills/`) or into the current project (`./.claude/skills/`)
+- Register the skill in your `CLAUDE.md` automatically
+- Print next steps
+
+### Option 2 — Install globally via npm
+
+```bash
+npm install -g pipeit-skill
+pipeit-skill
+```
+
+Run `pipeit-skill` once after installing to trigger the setup wizard.
+
+### Option 3 — Into the Solana AI Kit (git submodule)
 
 ```bash
 cd your-solana-ai-kit
 git submodule add https://github.com/ahmadou5/pipeit-skill .claude/skills/pipeit
 ```
 
-Then reference it in your `CLAUDE.md`:
+Then reference it in your root `CLAUDE.md`:
 
 ```markdown
 ## Skills
@@ -55,15 +76,33 @@ Then reference it in your `CLAUDE.md`:
 - `.claude/skills/pipeit/skill/SKILL.md` — @pipeit/core transaction building
 ```
 
+---
+
+## Manual CLAUDE.md registration
+
+If you skipped the installer or are managing `CLAUDE.md` yourself, add this entry:
+
+```markdown
+## Skills
+
+- `~/.claude/skills/pipeit-skill/skill/SKILL.md` — @pipeit/core transaction building
+```
+
+Adjust the path to match where the skill was installed.
+
+---
+
 ## Structure
 
 ```
 pipeit-skill/
 ├── CLAUDE.md                       # Claude Code registration
 ├── README.md
-├── install.sh
-├── install-custom.sh
+├── package.json
 ├── LICENSE
+│
+├── bin/
+│   └── install.js                  # npx entry point (setup wizard)
 │
 ├── skill/
 │   ├── SKILL.md                    # Entry point + routing table
@@ -87,6 +126,8 @@ pipeit-skill/
     └── pipeit-rules.md             # Coding rules enforced by skill
 ```
 
+---
+
 ## Stack covered
 
 | Layer               | Package                          |
@@ -96,6 +137,8 @@ pipeit-skill/
 | Instruction plans   | `@solana/instruction-plans`      |
 | Compute budget      | `@solana-program/compute-budget` |
 | TPU (optional)      | `@pipeit/fastlane`               |
+
+---
 
 ## License
 
