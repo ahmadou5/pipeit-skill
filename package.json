@@ -1,6 +1,6 @@
 {
   "name": "pipeit-skill",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "@pipeit/core transaction builder skill for Claude Code",
   "main": "bin/install.js",
   "bin": {
