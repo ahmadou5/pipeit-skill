@@ -46,11 +46,31 @@ Run the interactive installer without adding a dependency to your project:
 npx pipeit-skill
 ```
 
-The installer will:
+The installer will ask which agent you are using:
 
-- Ask whether to install globally (`~/.claude/skills/`) or into the current project (`./.claude/skills/`)
-- Register the skill in your `CLAUDE.md` automatically
-- Print next steps
+```
+  Which agent are you installing for?
+
+    1) Claude Code
+    2) Codex
+    3) Cursor
+    4) Other / Custom
+```
+
+Based on your choice it will:
+
+- Install skill files to the right directory for your agent
+- Register the skill in the correct config file (`CLAUDE.md`, `AGENTS.md`, or `.cursor/rules/`)
+- Print the entry point path so you can verify it loaded
+
+**Agent config locations:**
+
+| Agent       | Skill files                | Config file                     |
+| ----------- | -------------------------- | ------------------------------- |
+| Claude Code | `~/.claude/skills/pipeit/` | `~/.claude/CLAUDE.md`           |
+| Codex       | `~/.agents/skills/pipeit/` | `~/.agents/AGENTS.md`           |
+| Cursor      | `.cursor/skills/pipeit/`   | `.cursor/rules/pipeit-skill.md` |
+| Other       | custom path                | custom filename                 |
 
 ### Option 2 — Install globally via npm
 
@@ -61,7 +81,15 @@ pipeit-skill
 
 Run `pipeit-skill` once after installing to trigger the setup wizard.
 
-### Option 3 — Into the Solana AI Kit (git submodule)
+### Option 3 — Non-interactive (CI / scripts)
+
+Defaults to Claude Code and uses the default install path:
+
+```bash
+npx pipeit-skill -y
+```
+
+### Option 4 — Into the Solana AI Kit (git submodule)
 
 ```bash
 cd your-solana-ai-kit
@@ -78,17 +106,38 @@ Then reference it in your root `CLAUDE.md`:
 
 ---
 
-## Manual CLAUDE.md registration
+## Manual registration
 
-If you skipped the installer or are managing `CLAUDE.md` yourself, add this entry:
+If you skipped the installer or are managing your agent config yourself, add the entry point manually.
+
+**Claude Code** — append to `~/.claude/CLAUDE.md`:
 
 ```markdown
-## Skills
+## Pipeit Skill
 
-- `~/.claude/skills/pipeit-skill/skill/SKILL.md` — @pipeit/core transaction building
+Skill for `@pipeit/core` transaction building.
+Entry point: `~/.claude/skills/pipeit/skill/SKILL.md`
 ```
 
-Adjust the path to match where the skill was installed.
+**Codex** — append to `~/.agents/AGENTS.md`:
+
+```markdown
+## Pipeit Skill
+
+Skill for `@pipeit/core` transaction building.
+Entry point: `~/.agents/skills/pipeit/skill/SKILL.md`
+```
+
+**Cursor** — create `.cursor/rules/pipeit-skill.md`:
+
+```markdown
+# Pipeit Skill
+
+Skill for `@pipeit/core` transaction building.
+Entry point: `.cursor/skills/pipeit/skill/SKILL.md`
+```
+
+Adjust paths to match where the skill was installed.
 
 ---
 
