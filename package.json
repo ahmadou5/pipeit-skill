@@ -3,8 +3,9 @@
   "version": "1.0.4",
   "description": "@pipeit/core transaction builder skill for Claude Code",
   "main": "bin/install.js",
+  "type": "module",
   "bin": {
-    "install-pipeit-skill": "bin/install.js"
+    "pipeit-skill": "bin/install.js"
   },
   "files": [
     "bin/",
@@ -22,5 +23,8 @@
     "pipeit"
   ],
   "author": "ahmadou5",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "pipeit-skill": "^1.0.4"
+  }
 }

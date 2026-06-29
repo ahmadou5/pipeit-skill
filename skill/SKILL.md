@@ -1,3 +1,11 @@
+---
+name: pipeit-skill
+version: 1.0.4
+description: @pipeit/core transaction builder skill for Agents.
+author: ahmadou5
+license: MIT
+---
+
 # Pipeit Skill
 
 > Type-safe transaction building for Solana with `@pipeit/core`.
@@ -8,6 +16,7 @@
 ## What is Pipeit?
 
 `@pipeit/core` is a transaction builder that wraps `@solana/kit` with:
+
 - Auto-blockhash fetching, auto-retry, priority fees, compute unit estimation
 - Multi-step transaction flows with automatic batching
 - Kit instruction-plans integration
@@ -22,15 +31,15 @@
 
 Load only the skill file you need. Do not load all files at once.
 
-| Task | Load |
-|------|------|
-| Install, RPC setup, peer deps | [`setup.md`](./setup.md) |
-| Single transaction — build, simulate, execute, export | [`transaction-builder.md`](./transaction-builder.md) |
-| Multi-step flows, dependent steps, atomic groups | [`flow.md`](./flow.md) |
-| Kit instruction-plans, parallel/sequential batching | [`plans.md`](./plans.md) |
-| Jito bundles, parallel RPC, TPU, execution presets | [`execution-strategies.md`](./execution-strategies.md) |
-| Next.js TPU API route, server-side TPU proxy | [`server.md`](./server.md) |
-| Error types, diagnoseError, type guards | [`error-handling.md`](./error-handling.md) |
+| Task                                                  | Load                                                   |
+| ----------------------------------------------------- | ------------------------------------------------------ |
+| Install, RPC setup, peer deps                         | [`setup.md`](./setup.md)                               |
+| Single transaction — build, simulate, execute, export | [`transaction-builder.md`](./transaction-builder.md)   |
+| Multi-step flows, dependent steps, atomic groups      | [`flow.md`](./flow.md)                                 |
+| Kit instruction-plans, parallel/sequential batching   | [`plans.md`](./plans.md)                               |
+| Jito bundles, parallel RPC, TPU, execution presets    | [`execution-strategies.md`](./execution-strategies.md) |
+| Next.js TPU API route, server-side TPU proxy          | [`server.md`](./server.md)                             |
+| Error types, diagnoseError, type guards               | [`error-handling.md`](./error-handling.md)             |
 
 ---
 
